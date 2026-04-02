@@ -1,4 +1,4 @@
-const fs = require('node:fs');
+// const fs = require('node:fs');
 
 //fs = file system
 //1) create file
@@ -118,3 +118,13 @@ const fs = require('node:fs');
 
 
 // Note : if node version is less then 25 then use fs.rmdir() method to delete folder. But if node version is 25 or above then use fs.rm() method to delete folder. Because fs.rmdir() method is deprecated in node version 25 and above.
+
+
+import chalk from "chalk";
+
+console.log(chalk.blue("Write with chalk"));
+console.log(chalk.bgWhite.redBright("Write with chalk"))
+console.log(chalk.bgYellow.green.bold("Write with chalk"));
+
+
+

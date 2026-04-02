@@ -1,0 +1,27 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "node basic and npm understanding",
+  "homepage": "https://github.com/ritupatel1104/NodeJs_programs#readme",
+  "bugs": {
+    "url": "https://github.com/ritupatel1104/NodeJs_programs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ritupatel1104/NodeJs_programs.git"
+  },
+  "license": "ISC",
+  "author": "ritika",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2"
+  },
+  "devDependencies": {
+    "axios": "^1.14.0"
+  }
+}
