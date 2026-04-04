@@ -1,0 +1,2 @@
+Title: Task 2
+Details: Create EC2 instance in AWS
