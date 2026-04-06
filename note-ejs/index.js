@@ -64,7 +64,7 @@ app.get("/edit/:filename", (req, res)=>{
 })
 
 app.post("/rename", (req, res)=>{
-    fs.rename(`./tasks/${req.body.old}`, `./tasks/${req.body.new}`, (e) =>{
+    fs.rename(`./tasks/${req.body.old}`, `./tasks/${req.body.new}.txt`, (e) =>{
         if(e) throw error;
     })
     res.redirect("/")
