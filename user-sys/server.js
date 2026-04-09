@@ -4,6 +4,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userModel = require("./models/user.model");
 const postModel = require("./models/post.model");
+const path1 = require("path");
+const upload = require("./config/multer");
+
+
+
+
 
 const app = express();
 
@@ -11,6 +17,9 @@ app.use(express.json());
 app.use(express.urlencoded({ express: true }));
 
 app.use(cookieParser());
+
+app.use(express.static(path1.join(__dirname, "public")))
+
 
 app.set("view engine", "ejs");
 
@@ -27,12 +36,23 @@ app.get("/signup", (req, res) => {
 
 app.get("/profile", auth, async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email }).populate("posts");
-    console.log(user)
+    
+
+    //  let name = crypto.randomBytes(6).toString('hex');
+    //  console.log(name)
+
+
+
     res.render("profile", { user });
 });
 
 app.get("/post", (req, res) => {
     res.render("post");
+});
+
+app.get("/editprofile", auth, async (req, res) => {
+    let user = await userModel.findOne({ email: req.user.email });
+    res.render("editprofile", { user });
 });
 
 // back-end logic + database
@@ -83,14 +103,17 @@ app.get("/logout", (req, res) => {
 });
 
 // create post
-app.post("/post", auth, async (req, res) => {
+app.post("/post", auth, upload.single("imgurl"),  async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });
-    let { title, description, imgurl } = req.body;
+    let { title, description } = req.body;
+
+    console.log(req.file)
+
     let createdPost = await postModel.create({
         userId: user._id,
         title,
         description,
-        imgurl,
+        imgurl: req.file.filename,
     });
 
     // add (push) posts into user data
@@ -100,8 +123,34 @@ app.post("/post", auth, async (req, res) => {
 
 });
 
+//edit profile
+app.post("/edit", auth, async(req,res,next)=>{
+    let { fullname, username, email, phone, image} =req.body;
+    
+    await userModel.findOneAndUpdate(
+        { email: req.user.email },
+        {
+            fullname,
+            username,
+            email,
+            phone,
+            image,
+        },
+        {new:true}
+    );
+    res.redirect("/profile")
+})
 
 
+app.get("/delete/:id", auth, async(req,res)=>{
+    let user = await userModel.findOne({ email: req.user.email });
+    await postModel.findOneAndDelete({_id:req.params.id});
+    let postno = user.posts.indexOf(req.params.id);
+
+    user.posts.splice(postno, 1);
+    await user.save()
+    res.redirect("/profile");
+})
 
 //middleware functions
 function auth (req, res, next){
