@@ -6,6 +6,8 @@ const userModel = require("./models/user.model");
 const postModel = require("./models/post.model");
 const path1 = require("path");
 const upload = require("./config/multer");
+const morgan = require("morgan");
+
 
 
 
@@ -17,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ express: true }));
 
 app.use(cookieParser());
+app.use(morgan("dev"));
 
 app.use(express.static(path1.join(__dirname, "public")))
 
