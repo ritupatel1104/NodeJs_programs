@@ -71,3 +71,62 @@ module.exports.logout = (req,res)=>{
     res.clearCookie("token");
     res.status(200).json({message: "User Logout Successfully !!"})
 }
+
+
+module.exports.updateUser = async (req, res) => {
+    // 1. Check for Validation Errors (from your route rules)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { username, email, oldPassword, newPassword } = req.body;
+    const userId = req.user._id;
+
+    try {
+        // Fetch user and include password for comparison
+        const user = await userModel.findById(userId).select("+password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        // 2. Password Change Logic
+        if (newPassword && newPassword.trim() !== "") {
+            // Check if oldPassword was even provided in the request
+            if (!oldPassword) {
+                return res.status(400).json({ message: "Please provide current password to set a new one." });
+            }
+
+            // Verify if the current password is correct
+            const isMatch = await user.comparePassword(oldPassword);
+            if (!isMatch) {
+                return res.status(400).json({ message: "Current password is incorrect!" });
+            }
+
+            // Hash and update the new password
+            user.password = await userModel.hashPassword(newPassword);
+        }
+
+        // 3. Update Other Fields
+        user.username = username || user.username;
+        user.email = email || user.email;
+        
+        // Save the document (Mongoose will trigger pre-save hooks if any)
+        await user.save();
+
+        // Remove password from the response object for security
+        const userResponse = user.toObject();
+        delete userResponse.password;
+
+        res.status(200).json({ 
+            message: "Profile updated successfully!", 
+            user: userResponse 
+        });
+
+    } catch (err) {
+        console.error("Update Error:", err);
+        res.status(500).json({ message: "Server error during profile update" });
+    }
+};
+

@@ -31,6 +31,21 @@ router.get("/profile", middleWare.authUser, userController.profile)
 //logout user
 router.get("/logout", middleWare.authUser, userController.logout)
 
+
+router.put("/update",middleWare.authUser, 
+    [
+        body("username").isLength({ min: 4 }).withMessage("Username must be at least 4 characters"),
+        body("email").isEmail().withMessage("Enter a valid email"),
+        // VALIDATION FOR NEW PASSWORD
+        body("newPassword")
+            .optional({ checkFalsy: true }) // Only validates if the field is not empty
+            .isLength({ min: 6 })
+            .withMessage("New password must be at least 6 characters long!!"),
+    ], 
+    userController.updateUser
+);
+
+
 module.exports = router;
 
 

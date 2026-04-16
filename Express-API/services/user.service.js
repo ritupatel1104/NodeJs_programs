@@ -12,3 +12,7 @@ module.exports.createUser = async ({username, email, password}) =>{
         return user;
 
 };
+
+
+
+//update data
