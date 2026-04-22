@@ -1,2 +1,0 @@
-Title: Task 3
-Details: Learn linux command

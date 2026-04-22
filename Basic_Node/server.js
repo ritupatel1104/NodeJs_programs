@@ -16,8 +16,9 @@ const http = require("http");
 //res ==> send by server
 
 const server = http.createServer((req,res)=>{
-    console.log(req)
-    res.end("hello world");
+    //console.log(req)
+    res.end("Hello world\nRitika these side\nLearning node js");
+   
 })
 
 server.listen(3000,()=>{

@@ -19,9 +19,9 @@ app.get("/",(req, res)=>{
 // Create
 app.get("/create", async(req, res) => {
    let createdUser = await userModel.create({
-        username: 'test1',
-        name: 'test14 user',
-        email: "test4@gmail.com"
+        username: 'ritu',
+        name: 'Ritika',
+        email: "rp@gmail.com"
 
    });
 res.send(createdUser)

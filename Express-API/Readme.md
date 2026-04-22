@@ -44,3 +44,48 @@ Response ←──────────────────────�
 1) user register => post => username, email, password
 2) user login => post => email, password
 3) user profile => get
+
+
+## APIs Creation
+# User:
+- forget password
+- change password 
+
+- add cart
+- add wishlist
+- myorders
+
+# Admin:
+- product creation
+- product read single and all
+- product update
+- product delete
+
+- order tracking
+- stock management
+- invoice generate
+- notification
+- chatbot
+
+- create manager
+- manager manage rights
+
+- offer setup
+- cuppon setup
+- payment gateway
+
+# Manager:
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
