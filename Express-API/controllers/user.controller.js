@@ -119,3 +119,29 @@ module.exports.logout = (req,res)=>{
     res.clearCookie("token");
     res.status(200).json({message: "User Logout Successfully !!"})
 }
+
+// forget password => send email for reset password
+module.exports.forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        await userService.forgetPassword(email);
+        return res.status(200).json({ message: "Email has been Send to Your Registered Mail Sucessfully!! Check Your Mail!!" });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+};
+
+//reset password
+module.exports.resetPassword = async (req, res) =>{
+    try {
+        const token = req.params.token;
+        const {newPassword} = req.body;
+
+        await userService.resetPassword({token, newPassword});
+
+        return res.status(200).json({message: "Password Reset Successfully"});
+
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+    }
+}

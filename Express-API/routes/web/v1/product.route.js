@@ -18,10 +18,10 @@ router.post("/add", userMiddleware.authUser, adminMiddleware.authAdmin, productC
 // authAdmin => req.user => checks role => admin or not => if admin then jump to next router
 
 // all product
-router.get("/all", userMiddleware.authUser, adminMiddleware.authAdmin, productController.allProduct);
+router.get("/all", userMiddleware.authUser, productController.allProduct);
 
 // single product
-router.get("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.singleProduct);
+router.get("/:id", userMiddleware.authUser, productController.singleProduct);
 
 // update product
 router.put("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.updateProduct);

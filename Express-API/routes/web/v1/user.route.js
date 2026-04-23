@@ -45,6 +45,9 @@ router.put("/update",
 
 
 //forget password
-router.post("/forget-password", middleware.authUser)
+router.post("/forget-password", userController.forgetPassword);
+
+//reset password
+router.post("/reset-password/:token",userController.resetPassword);
 
 module.exports = router;
