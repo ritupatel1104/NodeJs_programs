@@ -6,12 +6,16 @@ const cartController = require("../../../controllers/cart.controller");
 
 
 //add items
-router.post("/add", userMiddleware.authUser, cartController.AddToCart);
+router.post("/add", userMiddleware.authUser, 
+    cartController.AddToCart);
 
 //get all items
+router.get("/all", userMiddleware.authUser,
+    cartController.GetCart);
 
-
-//remove items
+//remove single item from cart
+router.delete("/product/:id", userMiddleware.authUser,
+    cartController.RemoveItem);
 
 
 
