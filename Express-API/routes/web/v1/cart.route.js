@@ -17,6 +17,7 @@ router.get("/all", userMiddleware.authUser,
 router.delete("/product/:id", userMiddleware.authUser,
     cartController.RemoveItem);
 
+//remove all items from cart ---> empty cart
 
 
 module.exports = router;
