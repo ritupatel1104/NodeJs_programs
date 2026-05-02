@@ -7,7 +7,9 @@ const wishlistController = require("../../../controllers/wishlist.controller");
 // add into wishlist
 router.post("/add", userMiddleware.authUser, wishlistController.AddToWishlist);
 
-// remove item from wishlist
+router.get("/all", userMiddleware.authUser, wishlistController.GetWishlist);
+
+router.delete("/remove/:id", userMiddleware.authUser, wishlistController.RemoveItem);
 
 
 

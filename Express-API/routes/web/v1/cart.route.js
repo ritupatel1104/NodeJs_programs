@@ -10,14 +10,15 @@ router.post("/add", userMiddleware.authUser,
     cartController.AddToCart);
 
 //get all items
-router.get("/all", userMiddleware.authUser,
-    cartController.GetCart);
+// Make sure there are no extra spaces in "/all"
+router.get("/all", userMiddleware.authUser, cartController.GetCart);
 
 //remove single item from cart
 router.delete("/product/:id", userMiddleware.authUser,
     cartController.RemoveItem);
 
-//remove all items from cart ---> empty cart
+// This allows you to change quantity without being blocked by the "Duplicate" check
+router.put("/update-quantity", userMiddleware.authUser, cartController.UpdateQty);
 
 
 module.exports = router;

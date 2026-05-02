@@ -39,5 +39,7 @@ module.exports.CreateOrder = async ({userId, items}) => {
 
 //get order history
 module.exports.GetOrder = async (userId) =>{
-    return await orderModel.findOne({userId});
+   // .find() returns an array of all orders for that user
+    // .sort({ _id: -1 }) ensures the most recent order is at the top
+    return await orderModel.find({ userId }).sort({ _id: -1 });
 }

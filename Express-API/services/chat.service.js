@@ -1,4 +1,4 @@
-const { GoogleGenAI } = require("@google/genai");
+
 
 // 1) Rule Base Bot -> static reply
 const getStaticReply = (message) => {
@@ -30,23 +30,13 @@ const getStaticReply = (message) => {
   return "I didn't understand that."
 }
 
-// 2) AI chat bot
-const getAiReply = async (message) => {
-    const ai = new GoogleGenAI(process.env.GEMINI_API_KEY);
- const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: message,
-  });
-
-   return response.text
-};
 
 
 module.exports.getReply = async(message) => {
     try {
 
-      return await getAiReply(message)
-     //return getStaticReply(message)
+     // return await getAiReply(message)
+     return getStaticReply(message)
     } catch (error) {
         console.log(error);
         return getStaticReply(message)

@@ -1,45 +1,60 @@
-const cartModel = require("../models/cart.model")
+const mongoose = require("mongoose");
+const cartModel = require("../models/cart.model");
 
-//add items to cart
-module.exports.addToCart = async ({userId, item}) => {
-     let cart = await cartModel.findOne({userId});
-
-    if(!cart) {
-       cart = new cartModel({userId, items: []});
-    }
+// Add items to cart with logic to handle existing products
+module.exports.addToCart = async ({ userId, item }) => {
+    let cart = await cartModel.findOne({ userId });
     
-    cart.items.push(item);
-    return await cart.save();
-}
+    if (!cart) {
+        cart = new cartModel({ userId, items: [] });
+    }
 
-//get cart
-module.exports.GetCart = async (userId) =>{
-   return await cartModel.findOne({userId});
+    // DEBUG: Log this to your terminal to see what's happening
+    console.log("Adding Product ID:", item.productId);
+
+    const existingItemIndex = cart.items.findIndex((i) => {
+        // We use .toString() on both sides to be 100% sure they match
+        return i.productId.toString() === item.productId.toString();
+    });
+
+    if (existingItemIndex > -1) {
+        // PRODUCT FOUND: Increment
+        cart.items[existingItemIndex].quantity += (item.quantity || 1);
+    } else {
+        // PRODUCT NOT FOUND: Add new
+        cart.items.push({
+            productId: item.productId,
+            quantity: item.quantity || 1
+        });
+    }
+
+    return await cart.save();
 };
 
-
-// remove single product from cart
+module.exports.GetCart = async (userId) => {
+    return await cartModel.findOne({ userId }).populate("items.productId");
+};
+// Remove the entire product row from cart
 module.exports.RemoveSingleProduct = async ({ userId, productId }) => {
-    
-    // find login user cart
     let cart = await cartModel.findOne({ userId });
-    if(!cart){
-        throw new Error("Cart Not Found!!");
-    }
+    if (!cart) throw new Error("Cart Not Found!!");
 
-    // find index number of product based on productId
-    const itemIndex = cart.items.findIndex( (i) => i.productId.equals(productId), 
-        // console.log(i);
-        // // i => that give items array
-        // return i.productId.toString() === productId ;
-    );
-
-    console.log(itemIndex);
-    
-    if(itemIndex < 0){
-        throw new Error("Item Not Found!!");
-    }
+    const itemIndex = cart.items.findIndex((i) => i.productId.equals(productId));
+    if (itemIndex < 0) throw new Error("Item Not Found!!");
 
     cart.items.splice(itemIndex, 1);
-    await cart.save();
+    return await cart.save();
 };
+
+module.exports.UpdateQuantity = async ({ userId, productId, quantity }) => {
+    const cart = await cartModel.findOne({ userId });
+    if (!cart) throw new Error("Cart not found");
+
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId.toString());
+    if (itemIndex === -1) throw new Error("Item not in cart");
+
+    // Set the absolute quantity
+    cart.items[itemIndex].quantity = quantity;
+    return await cart.save();
+};
+

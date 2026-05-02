@@ -22,7 +22,7 @@ export default function Login() {
         const data = response.data;
         // Ensure you use the correct token key from your backend response
         localStorage.setItem("token", data.token); 
-        navigate("/profile");
+        navigate("/home");
         setError(""); // Clear errors on success
       }
 
